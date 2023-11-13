@@ -1,0 +1,91 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using TMPro;
+
+public class Player : MonoBehaviour
+{
+    public GameObject bulletPrefab;
+    public GameObject explosionPrefab;
+    public float playerSpeed;
+    private float horizontalScreenLimit = 10f;
+    private float verticalScreenLimit = 4f;
+    public int lives;
+    public TextMeshProUGUI lifeText;
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        playerSpeed = 6f;
+        lives = 3;
+        lifeText = GameObject.Find("GameManager").GetComponent<GameManager>().livesText;
+        lifeText.text = "Lives: " + lives;
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        Movement();
+        Shooting();
+    }
+
+    void Movement()
+    {
+        transform.Translate(new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"), 0) * Time.deltaTime * playerSpeed);
+        if (transform.position.x > horizontalScreenLimit || transform.position.x <= -horizontalScreenLimit)
+        {
+            transform.position = new Vector3(transform.position.x * -1f, transform.position.y, 0);
+        }
+        if (transform.position.y < -verticalScreenLimit)
+        {
+            transform.position = new Vector3(transform.position.x, -verticalScreenLimit, 0);
+        } else if (transform.position.y >= 0)
+        {
+            transform.position = new Vector3(transform.position.x, 0, 0);
+        }
+    }
+
+    void Shooting()
+    {
+        if(Input.GetKeyDown(KeyCode.Space))
+        {
+            Instantiate(bulletPrefab, transform.position + new Vector3(0, 1, 0), Quaternion.identity);
+        }
+    }
+
+    public void LoseLife()
+    {
+        lives--;
+        lifeText.text = "Lives: " + lives;
+        //lives -= 1;
+        //lives = lives - 1;
+        if (lives <= 0) 
+        {
+            //Game Over
+            GameObject.Find("GameManager").GetComponent<GameManager>().GameOver();
+            Instantiate(explosionPrefab, transform.position, Quaternion.identity);
+            Destroy(this.gameObject);
+        }
+    }
+
+
+    void OnTriggerEnter2D(Collider2D whatIHit)
+    {
+        if (whatIHit.tag == "Health")
+        {
+            if (lives >= 3)
+            {
+                GameObject.Find("GameManager").GetComponent<GameManager>().EarnScore(1);
+            }
+               else if(lives < 3)
+            {
+                lives++;
+                lifeText.text = "lives:" + lives;
+            }
+            Destroy(whatIHit.gameObject);
+
+        }
+
+
+    }
+}
