@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using TMPro;
 
 public class Player : MonoBehaviour
 {
@@ -11,15 +10,24 @@ public class Player : MonoBehaviour
     private float horizontalScreenLimit = 10f;
     private float verticalScreenLimit = 4f;
     public int lives;
-    public TextMeshProUGUI lifeText;
+    public GameObject gM;
+    public AudioClip coinSound;
+    public AudioClip healthSound;
+    public AudioClip powerupSound;
+    public AudioClip powerdownSound;
+    private bool betterWeapon;
+    public GameObject thruster;
+    public GameObject shield;
+    private bool betterShield;
 
     // Start is called before the first frame update
     void Start()
     {
-        playerSpeed = 6f;
+        playerSpeed = 10f;
+        betterWeapon = false;
+        betterShield = false;
         lives = 3;
-        lifeText = GameObject.Find("GameManager").GetComponent<GameManager>().livesText;
-        lifeText.text = "Lives: " + lives;
+        gM = GameObject.Find("GameManager");
     }
 
     // Update is called once per frame
@@ -47,45 +55,104 @@ public class Player : MonoBehaviour
 
     void Shooting()
     {
-        if(Input.GetKeyDown(KeyCode.Space))
+        if(Input.GetKeyDown(KeyCode.Space) && !betterWeapon)
         {
             Instantiate(bulletPrefab, transform.position + new Vector3(0, 1, 0), Quaternion.identity);
+        } else if(Input.GetKeyDown(KeyCode.Space) && betterWeapon)
+        {
+            Instantiate(bulletPrefab, transform.position + new Vector3(0.5f, 1, 0), Quaternion.Euler(0, 0, -45f)); ;
+            Instantiate(bulletPrefab, transform.position + new Vector3(0, 1, 0), Quaternion.identity);
+            Instantiate(bulletPrefab, transform.position + new Vector3(-0.5f, 1, 0), Quaternion.Euler(0, 0, 45f));
         }
     }
 
     public void LoseLife()
     {
+        if (betterShield == true)
+        {
+            shield.SetActive(false);
+            betterShield = false;
+            gM.GetComponent<GameManager>().PowerupChange("No Powerup");
+            return;
+        }
         lives--;
-        lifeText.text = "Lives: " + lives;
         //lives -= 1;
         //lives = lives - 1;
+        gM.GetComponent<GameManager>().LivesChange(lives);
         if (lives <= 0) 
         {
             //Game Over
-            GameObject.Find("GameManager").GetComponent<GameManager>().GameOver();
+            gM.GetComponent<GameManager>().GameOver();
             Instantiate(explosionPrefab, transform.position, Quaternion.identity);
             Destroy(this.gameObject);
         }
     }
 
-
-    void OnTriggerEnter2D(Collider2D whatIHit)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (whatIHit.tag == "Health")
+        switch(collision.name)
         {
-            if (lives >= 3)
-            {
-                GameObject.Find("GameManager").GetComponent<GameManager>().EarnScore(1);
-            }
-               else if(lives < 3)
-            {
-                lives++;
-                lifeText.text = "lives:" + lives;
-            }
-            Destroy(whatIHit.gameObject);
-
+            case "KatCoin(Clone)":
+                //I picked a coin!
+                AudioSource.PlayClipAtPoint(coinSound, transform.position);
+                gM.GetComponent<GameManager>().EarnScore(1);
+                Destroy(collision.gameObject);
+                break;
+            case "Health(Clone)":
+                //I picked a health!
+                AudioSource.PlayClipAtPoint(healthSound, transform.position);
+                if (lives >= 3)
+                {
+                    gM.GetComponent<GameManager>().EarnScore(1);
+                } else if (lives < 3)
+                {
+                    lives++;
+                    gM.GetComponent<GameManager>().LivesChange(lives);
+                }
+                Destroy(collision.gameObject);
+                break;
+            case "Powerup(Clone)":
+                //I picked a powerup!
+                AudioSource.PlayClipAtPoint(powerupSound, transform.position);
+                Destroy(collision.gameObject);
+                int tempInt;
+                tempInt = Random.Range(1, 4);
+                if (tempInt == 1)
+                {
+                    playerSpeed = 16f;
+                    StartCoroutine("SpeedPowerDown");
+                    gM.GetComponent<GameManager>().PowerupChange("Speed");
+                    thruster.SetActive(true);
+                } else if (tempInt == 2)
+                {
+                    betterWeapon = true;
+                    StartCoroutine("WeaponPowerDown");
+                    gM.GetComponent<GameManager>().PowerupChange("Weapon");
+                } else if (tempInt == 3)
+                {
+                    betterShield = true;
+                    shield.SetActive(true);
+                    gM.GetComponent<GameManager>().PowerupChange("Shield");
+                }
+                break;
         }
-
-
     }
+
+    IEnumerator SpeedPowerDown ()
+    {
+        yield return new WaitForSeconds(4f);
+        AudioSource.PlayClipAtPoint(powerdownSound, transform.position);
+        playerSpeed = 6f;
+        thruster.SetActive(false);
+        gM.GetComponent<GameManager>().PowerupChange("No Powerup");
+    }
+
+    IEnumerator WeaponPowerDown()
+    {
+        yield return new WaitForSeconds(4f);
+        AudioSource.PlayClipAtPoint(powerdownSound, transform.position);
+        betterWeapon = false;
+        gM.GetComponent<GameManager>().PowerupChange("No Powerup");
+    }
+
 }

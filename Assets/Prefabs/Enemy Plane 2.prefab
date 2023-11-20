@@ -10,9 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 2311648866279264427}
   - component: {fileID: 783928142399364102}
-  - component: {fileID: -7267187167526726067}
   - component: {fileID: -7522134756757745700}
   - component: {fileID: 61506614032202934}
+  - component: {fileID: -80020262065976927}
   m_Layer: 0
   m_Name: Enemy Plane 2
   m_TagString: Untagged
@@ -29,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 4825340658517901407}
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.59341, y: 0.59341, z: 0.59341}
+  m_LocalScale: {x: 0.48373446, y: 0.48373446, z: 0.48373446}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -76,7 +76,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 3fa5084cd0748494cae4bda556b7bc8a, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 8d84250e77cc98e4a81797ffcb8806a8, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -87,18 +87,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &-7267187167526726067
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4825340658517901407}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6e380661ae37cf7469c6ebbad00bbe67, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!50 &-7522134756757745700
 Rigidbody2D:
   serializedVersion: 4
@@ -146,3 +134,16 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 5.206171, y: 4.9309006}
   m_EdgeRadius: 0
+--- !u!114 &-80020262065976927
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4825340658517901407}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f08d670a67b2f44f8b68cc76b0c8720, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  explosionPrefab: {fileID: 3822501478942799844, guid: 6f0a0456017f880488c728abbc5d9ef5, type: 3}

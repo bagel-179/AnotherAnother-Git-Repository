@@ -3,16 +3,7 @@ guid: 0a8f3bb7954e09c4594a5ddcee87d73d
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences:
-  - playerPrefab: {fileID: 3526111692601373068, guid: d32cd24f901ee944ea65b1393124f6ae, type: 3}
-  - enemyOnePrefab: {fileID: 7135856955845734515, guid: 0059f3b5bf583384c97db9a24bb61b66, type: 3}
-  - enemyTwoPrefab: {fileID: 4825340658517901407, guid: 274c401cc394554468b7b10ce4b91222, type: 3}
-  - enemyThreePrefab: {fileID: 7706932884216109512, guid: 104289640b28a934b8f7cfa46714b35d, type: 3}
-  - cloudPrefab: {fileID: 5962211338321189265, guid: 2aa5a463c43b66640881fb97ef1000b8, type: 3}
-  - katCoinPrefab: {fileID: 6632946650513911844, guid: 2afe9fc3aed0fa841afd80b426885c4f, type: 3}
-  - healthBoostPrefab: {fileID: 3131002217629887861, guid: 807bd75bdc11a0b4c8c7e13d7b76eff2, type: 3}
-  - scoreText: {instanceID: 0}
-  - livesText: {instanceID: 0}
+  defaultReferences: []
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
